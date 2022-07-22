@@ -1,7 +1,7 @@
 use crate::witness::{
-    dns::Claim as DnsStatement, github::Opts as GitHubStatement,
-    self_signed::Opts as SelfSignedStatement, twitter::Opts as TwitterStatement,
-    witness::Statement,
+    basic_post::Claim as BasicPostStatement, dns::Claim as DnsStatement,
+    github::Opts as GitHubStatement, self_signed::Opts as SelfSignedStatement,
+    twitter::Opts as TwitterStatement, witness::Statement,
 };
 
 use crate::signer::signer::SignerError;
@@ -12,6 +12,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub enum StatementTypes {
+    #[serde(rename = "basic_post")]
+    BasicPost(BasicPostStatement),
     #[serde(rename = "dns")]
     Dns(DnsStatement),
     #[serde(rename = "github")]
@@ -25,6 +27,7 @@ pub enum StatementTypes {
 impl Statement for StatementTypes {
     fn generate_statement(&self) -> Result<String, WitnessError> {
         match &self {
+            StatementTypes::BasicPost(x) => x.generate_statement(),
             StatementTypes::Dns(x) => x.generate_statement(),
             StatementTypes::GitHub(x) => x.generate_statement(),
             StatementTypes::SelfSigned(x) => x.generate_statement(),
@@ -34,6 +37,7 @@ impl Statement for StatementTypes {
 
     fn delimitor(&self) -> String {
         match &self {
+            StatementTypes::BasicPost(x) => x.delimitor(),
             StatementTypes::Dns(x) => x.delimitor(),
             StatementTypes::GitHub(x) => x.delimitor(),
             // TODO / NOTE: Should this be an err? Permitted? A value?
@@ -44,6 +48,7 @@ impl Statement for StatementTypes {
 
     fn signer_type(&self) -> Result<SignerTypes, SignerError> {
         match &self {
+            StatementTypes::BasicPost(x) => x.signer_type(),
             StatementTypes::Dns(x) => x.signer_type(),
             StatementTypes::GitHub(x) => x.signer_type(),
             // TODO: Should this be seperated into a different trait?

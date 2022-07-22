@@ -16,30 +16,39 @@
     $: title = "";
     $: body = "";
 
+    const makeKeyType = () => {
+        throw new Error("Not implemented!");
+    };
+
     const post = async () => {
         try {
-            let b = {
-                basic_post: {
-                    title,
-                    body,
-                    delimitor,
-                },
-            };
+            let statement = `${title}${delimitor}${body}`;
+            if (s) {
+                let signature = await s.sign(statement);
+                let b = {
+                    basic_post: {
+                        title,
+                        body,
+                        signature,
+                        key_type: makeKeyType(),
+                    },
+                };
 
-            let c = await fetch(witnessUrl, {
-                method: "POST",
-                body: JSON.stringify(b),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+                let c = await fetch(witnessUrl, {
+                    method: "POST",
+                    body: JSON.stringify(b),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
 
-            let nextPosts = p.map((x) => x);
-            nextPosts.push(c);
-            posts.set(nextPosts);
+                let nextPosts = p.map((x) => x);
+                nextPosts.push(c);
+                posts.set(nextPosts);
 
-            title = "";
-            body = "";
+                title = "";
+                body = "";
+            }
         } catch (e) {
             alert(e);
         }

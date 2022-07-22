@@ -1,3 +1,4 @@
+pub mod basic_post;
 pub mod dns;
 pub mod generator;
 pub mod github;

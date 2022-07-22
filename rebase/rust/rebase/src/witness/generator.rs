@@ -2,6 +2,7 @@ use crate::{
     schema::schema_type::SchemaType,
     signer::signer::{Signer, SignerType},
     witness::{
+        basic_post::ClaimGenerator as BasicPostGen,
         dns::ClaimGenerator as DnsGen,
         github::ClaimGenerator as GithubGen,
         proof_type::ProofTypes,
@@ -13,8 +14,10 @@ use crate::{
 
 use ssi::vc::Credential;
 pub struct WitnessGenerator {
+    // BasicPost takes no configuration so is supported by default.
     // DNS takes no configuration so is supported by default.
     // TODO: Make consistent?
+    pub basic_post: BasicPostGen,
     pub dns: DnsGen,
     pub github: Option<GithubGen>,
     pub twitter: Option<TwitterGen>,
@@ -24,6 +27,7 @@ impl WitnessGenerator {
     // TODO: Streamline this into opts struct?
     pub fn new(twitter_api_key: Option<String>, user_agent: Option<String>) -> Self {
         WitnessGenerator {
+            basic_post: BasicPostGen {},
             dns: DnsGen {},
             github: match user_agent {
                 Some(s) => Some(GithubGen { user_agent: s }),
@@ -42,6 +46,7 @@ impl WitnessGenerator {
         signer: &dyn Signer<T>,
     ) -> Result<Credential, WitnessError> {
         match proof {
+            ProofTypes::BasicPost(x) => self.basic_post.credential(x, signer).await,
             ProofTypes::Dns(x) => self.dns.credential(x, signer).await,
             ProofTypes::SelfSigned(x) => {
                 // Validates inner signature by creating
@@ -78,6 +83,7 @@ impl WitnessGenerator {
         signer: &dyn Signer<T>,
     ) -> Result<String, WitnessError> {
         match proof {
+            ProofTypes::BasicPost(x) => self.basic_post.jwt(x, signer).await,
             ProofTypes::Dns(x) => self.dns.jwt(x, signer).await,
             ProofTypes::SelfSigned(x) => {
                 // Validates inner signature by creating
