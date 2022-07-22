@@ -17,6 +17,8 @@ export interface Signer {
 
 export const signer: Writable<Signer | false>  = writable(false);
 export const posts: Writable<Array<Object>> = writable([]);
+export const witnessUrl = "http://localhost:8787/witness";
+export const delimitor = ":::";
 
 export const connectSigner = async (): Promise<void> => {
     let ens: ENSType;
