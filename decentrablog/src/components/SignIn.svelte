@@ -1,18 +1,16 @@
 <script lang="ts">
-    import { connectSigner, signer, Signer } from "../util/store";
+    import { connectSigner, disconnect, signer, Signer } from "../util/store";
     let s: Signer | false = false;
     signer.subscribe((x) => (s = x));
 </script>
 
 <div>
-    <p>This is Sign In.</p>
+    <p>Connect or Disconnect Signer</p>
     {#if !s}
         <button on:click={connectSigner}>Connect</button>
     {:else}
         <button
-            on:click={() => {
-                alert("UNIMPLEMENTED!");
-            }}>Disconnect</button
+            on:click={disconnect}>Disconnect</button
         >
     {/if}
 </div>

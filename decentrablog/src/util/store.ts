@@ -16,6 +16,7 @@ export interface Signer {
 };
 
 export const signer: Writable<Signer | false>  = writable(false);
+export const posts: Writable<Array<Object>> = writable([]);
 
 export const connectSigner = async (): Promise<void> => {
     let ens: ENSType;
@@ -66,4 +67,22 @@ export const connectSigner = async (): Promise<void> => {
     const id = (): string => ids[0];
 
     signer.set({ sign, id, provider, ens });
+}
+
+export const disconnect = async () => {
+    signer.set(false);
+
+    const providerOptions = {
+        /* See Provider Options Section */
+    };
+
+    const web3Modal = new Web3Modal({
+        network: "mainnet",
+        cacheProvider: true,
+        providerOptions,
+    });
+
+    await web3Modal.clearCachedProvider();
+
+    return;
 }
