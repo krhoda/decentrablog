@@ -8,6 +8,8 @@
     }
 
     const credentialToPost = (o: Object): Post | false => {
+        console.log("OBJECT:");
+        console.log(o);
         return false;
     };
 

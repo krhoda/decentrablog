@@ -1,5 +1,5 @@
 use crate::witness::{
-    basic_post::Claim as BasicPostStatement, dns::Claim as DnsStatement,
+    basic_post::Opts as BasicPostStatement, dns::Claim as DnsStatement,
     github::Opts as GitHubStatement, self_signed::Opts as SelfSignedStatement,
     twitter::Opts as TwitterStatement, witness::Statement,
 };

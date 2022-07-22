@@ -25,7 +25,7 @@ impl Statement for Opts {
     }
 
     fn generate_statement(&self) -> Result<String, WitnessError> {
-        Ok(format!("{}{}{}", self.title, self.delimitor(), self.body))
+        Ok(format!("{}{}", self.title, self.body))
     }
 
     fn delimitor(&self) -> String {

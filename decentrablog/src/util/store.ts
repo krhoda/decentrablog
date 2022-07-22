@@ -17,8 +17,16 @@ export interface Signer {
 
 export const signer: Writable<Signer | false>  = writable(false);
 export const posts: Writable<Array<Object>> = writable([]);
-export const witnessUrl = "http://localhost:8787/witness";
-export const delimitor = ":::";
+export const witnessUrl = "http://localhost:8787";
+export interface KeyType {
+    pkh?: {
+        eip155: {
+            address: string;
+            chain_id: string;
+        };
+    },
+    web?: string;
+}
 
 export const connectSigner = async (): Promise<void> => {
     let ens: ENSType;
