@@ -1,11 +1,8 @@
 <script lang="ts">
     import { Link } from "svelte-navigator";
-    import { signer, Signer, KeyType, witnessUrl, posts } from "../util/store";
+    import { signer, Signer, KeyType, witnessUrl, posts, addPost } from "../util/store";
     let s: false | Signer = false;
     signer.subscribe((x) => (s = x));
-
-    let p: Array<Object> = [];
-    posts.subscribe((x) => (p = x));
 
     $: title = "";
     $: body = "";
@@ -72,11 +69,7 @@
 
                 let { jwt } = j;
                 console.log(jwt);
-
-                // let credential = fmt(jwt)
-                // let nextPosts = p.map((x) => x);
-                // nextPosts.push(credential);
-                // posts.set(nextPosts);
+                addPost(jwt);
 
                 title = "";
                 body = "";

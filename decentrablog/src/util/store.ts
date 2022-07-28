@@ -16,7 +16,15 @@ export interface Signer {
 };
 
 export const signer: Writable<Signer | false>  = writable(false);
-export const posts: Writable<Array<Object>> = writable([]);
+export const posts: Writable<Array<string>> = writable([]);
+let _posts: Array<string> = [];
+posts.subscribe(x => (_posts = x));
+export const addPost = (jwt: string) => {
+    const p = _posts.map(x => x);
+    p.push(jwt);
+    posts.set(p);
+}
+
 export const witnessUrl = "http://localhost:8787";
 export interface KeyType {
     pkh?: {
@@ -96,3 +104,4 @@ export const disconnect = async () => {
 
     return;
 }
+
